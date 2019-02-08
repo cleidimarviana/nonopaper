@@ -33,7 +33,7 @@ class App extends Component {
       </Navbar>
 
         <Container>
-        <Row class="row">
+        <Row>
             <Alert dismissible variant="danger">
               <Alert.Heading>Birits</Alert.Heading>
               <p>
