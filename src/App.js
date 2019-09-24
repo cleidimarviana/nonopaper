@@ -16,8 +16,10 @@ class App extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleGameClick = this.handleGameClick.bind(this);
-
     this.buscaCep = this.buscaCep.bind(this);
+
+
+    this.handleChangeSelect = this.handleChangeSelect.bind(this);
   }
   componentWillMount() {
 
@@ -39,9 +41,36 @@ class App extends Component {
     xhr.send()
   }
 
+  buscaCidades(uf) {
+    
+    var strUf = uf ? uf.toUpperCase() : uf;
+    // create a new XMLHttpRequest
+    var xhr = new XMLHttpRequest()
+
+    // get a callback when the server responds
+    xhr.addEventListener('load', () => {
+      // update the state of the component with the result here
+      console.log(xhr.responseText);
+      this.setState({ resultado: xhr.responseText });
+    })
+    // open the request with the verb and the url
+    //xhr.open('GET', 'https://servicodados.ibge.gov.br/api/v1/localidades/estados/'+UF+'/municipios')
+    xhr.open('GET', ' https://br-cidade-estado-nodejs.glitch.me/cidades?estadoId='+ strUf);
+    
+    // send the request
+    xhr.send()
+  }
 
   handleChange(event) {
     this.setState({ value: event.target.value });
+  }
+
+  handleChangeSelect = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
+
+    console.log(this.state);
+
+    this.buscaCidades(this.state.estado)
   }
 
   handleSubmit(event) {
@@ -93,7 +122,7 @@ class App extends Component {
                       type="text"
                       className="form-control"
                       aria-describedby="emailHelp"
-                      placeholder="Update input here" value={this.state.value} onChange={this.handleChange} />
+                      placeholder="Entre com o CEP aqui" value={this.state.value} onChange={this.handleChange} />
 
                     <InputGroup.Append>
                       <Button type="submit" variant="outline-secondary" onClick={this.handleGameClick}>Buscar</Button>
@@ -102,43 +131,70 @@ class App extends Component {
 
                   <Form.Row>
                     <Form.Group as={Col} controlId="formGridState">
-                      <Form.Control as="select" size="sm">
-                        <option value="no">Selecione o Estado</option>
-                        <option value="ac">Acre</option>
-                        <option value="al">Alagoas</option>
-                        <option value="am">Amazonas</option>
-                        <option value="ap">Amapá</option>
-                        <option value="ba">Bahia</option>
-                        <option value="ce">Ceará</option>
-                        <option value="df">Distrito Federal</option>
-                        <option value="es">Espírito Santo</option>
-                        <option value="go">Goiás</option>
-                        <option value="ma">Maranhão</option>
-                        <option value="mt">Mato Grosso</option>
-                        <option value="ms">Mato Grosso do Sul</option>
-                        <option value="mg">Minas Gerais</option>
-                        <option value="pa">Pará</option>
-                        <option value="pb">Paraíba</option>
-                        <option value="pr">Paraná</option>
-                        <option value="pe">Pernambuco</option>
-                        <option value="pi">Piauí</option>
-                        <option value="rj">Rio de Janeiro</option>
-                        <option value="rn">Rio Grande do Norte</option>
-                        <option value="ro">Rondônia</option>
-                        <option value="rs">Rio Grande do Sul</option>
-                        <option value="rr">Roraima</option>
-                        <option value="sc">Santa Catarina</option>
-                        <option value="se">Sergipe</option>
-                        <option value="sp">São Paulo</option>
-                        <option value="to">Tocantins</option>
+                      <Form.Control as="select" name="estado" size="sm" value={this.state.estado} onChange={this.handleChangeSelect}>
+                        <option code="no" value="no">Selecione o estado (UF)</option>
+                        <option code="12" value="ac">Acre</option>
+                        <option code="27" value="al">Alagoas</option>
+                        <option code="13" value="am">Amazonas</option>
+                        <option code="16" value="ap">Amapá</option>
+                        <option code="29" value="ba">Bahia</option>
+                        <option code="23" value="ce">Ceará</option>
+                        <option code="53" value="df">Distrito Federal</option>
+                        <option code="32" value="es">Espírito Santo</option>
+                        <option code="52" value="go">Goiás</option>
+                        <option code="21" value="ma">Maranhão</option>
+                        <option code="51" value="mt">Mato Grosso</option>
+                        <option code="50" value="ms">Mato Grosso do Sul</option>
+                        <option code="31" value="mg">Minas Gerais</option>
+                        <option code="15" value="pa">Pará</option>
+                        <option code="25" value="pb">Paraíba</option>
+                        <option code="41" value="pr">Paraná</option>
+                        <option code="26" value="pe">Pernambuco</option>
+                        <option code="22" value="pi">Piauí</option>
+                        <option code="33" value="rj">Rio de Janeiro</option>
+                        <option code="24" value="rn">Rio Grande do Norte</option>
+                        <option code="11" value="ro">Rondônia</option>
+                        <option code="43" value="rs">Rio Grande do Sul</option>
+                        <option code="14" value="rr">Roraima</option>
+                        <option code="42" value="sc">Santa Catarina</option>
+                        <option code="28" value="se">Sergipe</option>
+                        <option code="35" value="sp">São Paulo</option>
+                        <option code="17" value="to">Tocantins</option>
                       </Form.Control>
                     </Form.Group>
-                    <Form.Group as={Col} controlId="formGridCity">
-                      <Form.Control />
+                    <Form.Group as={Col} controlId="formGridCity" >
+                    <Form.Control as="select" name="estado" size="sm" value={this.state.estado} onChange={this.handleChangeSelect}>
+                        <option code="no" value="no">Cidade</option>
+                        <option code="12" value="ac">Acre</option>
+                        <option code="27" value="al">Alagoas</option>
+                        <option code="13" value="am">Amazonas</option>
+                        <option code="16" value="ap">Amapá</option>
+                        <option code="29" value="ba">Bahia</option>
+                        <option code="23" value="ce">Ceará</option>
+                        <option code="53" value="df">Distrito Federal</option>
+                        <option code="32" value="es">Espírito Santo</option>
+                        <option code="52" value="go">Goiás</option>
+                        <option code="21" value="ma">Maranhão</option>
+                        <option code="51" value="mt">Mato Grosso</option>
+                        <option code="50" value="ms">Mato Grosso do Sul</option>
+                        <option code="31" value="mg">Minas Gerais</option>
+                        <option code="15" value="pa">Pará</option>
+                        <option code="25" value="pb">Paraíba</option>
+                        <option code="41" value="pr">Paraná</option>
+                        <option code="26" value="pe">Pernambuco</option>
+                        <option code="22" value="pi">Piauí</option>
+                        <option code="33" value="rj">Rio de Janeiro</option>
+                        <option code="24" value="rn">Rio Grande do Norte</option>
+                        <option code="11" value="ro">Rondônia</option>
+                        <option code="43" value="rs">Rio Grande do Sul</option>
+                        <option code="14" value="rr">Roraima</option>
+                        <option code="42" value="sc">Santa Catarina</option>
+                        <option code="28" value="se">Sergipe</option>
+                        <option code="35" value="sp">São Paulo</option>
+                        <option code="17" value="to">Tocantins</option>
+                      </Form.Control>
                     </Form.Group>
-                    <Form.Group as={Col} controlId="formGridZip">
-                      <Form.Control />
-                    </Form.Group>
+                    
                   </Form.Row>
 
                   <Form.Group controlId="exampleForm.ControlSelect1" className="mb-2">
